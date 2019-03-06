@@ -5,7 +5,7 @@ class Stack {
 
 private:
     size_t max_size;
-    int *buff;
+    int* buff;
     ssize_t top;
 
 public:
@@ -14,29 +14,31 @@ public:
         max_size = length;
         buff = new int[max_size];
     }
-
     ~Stack() {
         delete[] buff;
     }
-
     void push(int elem) {
         ++top;
-        if (top > max_size)
+        if (top == max_size){
             expand();
+        }
         buff[top] = elem;
-    }
 
+    }
     int pop() {
-        if (is_empty())
+        if (is_empty()) {
             return -1;
+        }
         return buff[top--];
     }
 
     void expand() {
-        max_size *= 2;
-        int *temp_buff = new int[max_size];
-        memcpy(temp_buff, buff, size());
+        size_t new_max_size = max_size*2;
+        int* temp_buff = new int[new_max_size];
+        memcpy(temp_buff, buff, sizeof(int)*max_size);
+        //for (int i = 0; i < max_size; i++) temp_buff[i] = buff[i];
         delete[] buff;
+        max_size = new_max_size;
         buff = temp_buff;
     }
 
@@ -44,8 +46,8 @@ public:
         return (top < 0);
     }
 
-    size_t size() {
-        return size_t(top + 1);
+    ssize_t size() {
+        return top;
     }
 };
 
@@ -58,15 +60,17 @@ public:
     void insert(int data) {
         initial.push(data);
     }
-
     int remove() {
-        if (final.is_empty()) {
-            while (!initial.is_empty())
-                final.push(initial.pop());
+        ssize_t n = initial.size();
+        for (ssize_t i = 0; i <= n; i++) {
+            final.push(initial.pop());
         }
-        return final.pop();
+        int elem = final.pop();
+        for (int i = 0; i <n; i++) {
+            initial.push(final.pop());
+        }
+        return elem;
     }
-
     bool is_empty() {
         return initial.is_empty();
     }
@@ -76,24 +80,27 @@ bool is_correct(size_t n) {
     Queue queue;
     int command = 0;
     int value = -1;
-    int real_value = -1;
+    int realValue = -1;
 
-    for (size_t i = 0; i < n; ++i) {
+    for (int i = 0; i < n; ++i) {
         std::cin >> command >> value;
-
-        if (command == 3) {
-
-            queue.insert(value);
-
-        } else if (command == 2) {
-
-            if (queue.is_empty()) {
-                    real_value = -1;
-            } else  real_value = queue.remove();
-            if (real_value != value)
+        switch (command) {
+            case 3:
+                queue.insert(value);
+                break;
+            case 2:
+                if (!queue.is_empty()) {
+                    realValue = queue.remove();
+                } else {
+                    realValue = -1;
+                }
+                if (realValue != value) {
+                    return false;
+                }
+                break;
+            default:
                 return false;
-
-        } else return false;
+        }
     }
     return true;
 }
