@@ -5,7 +5,7 @@ class Stack {
 
 private:
     size_t max_size;
-    int* buff;
+    int *buff;
     ssize_t top;
 
 public:
@@ -14,17 +14,19 @@ public:
         max_size = length;
         buff = new int[max_size];
     }
+
     ~Stack() {
         delete[] buff;
     }
+
     void push(int elem) {
-        ++top;
-        if (top == max_size){
+        if (size() == max_size) {
             expand();
         }
+        ++top;
         buff[top] = elem;
-
     }
+
     int pop() {
         if (is_empty()) {
             return -1;
@@ -33,12 +35,10 @@ public:
     }
 
     void expand() {
-        size_t new_max_size = max_size*2;
-        int* temp_buff = new int[new_max_size];
-        memcpy(temp_buff, buff, sizeof(int)*max_size);
-        //for (int i = 0; i < max_size; i++) temp_buff[i] = buff[i];
+        max_size *= 2;
+        int *temp_buff = new int[max_size];
+        memcpy(temp_buff, buff, sizeof(int) * size());
         delete[] buff;
-        max_size = new_max_size;
         buff = temp_buff;
     }
 
@@ -46,33 +46,33 @@ public:
         return (top < 0);
     }
 
-    ssize_t size() {
-        return top;
+    size_t size() {
+        return size_t (top + 1);
     }
 };
 
 
 class Queue {
 private:
-    Stack initial;
-    Stack final;
+    Stack tail;
+    Stack head;
 public:
     void insert(int data) {
-        initial.push(data);
+        tail.push(data);
     }
+
     int remove() {
-        ssize_t n = initial.size();
-        for (ssize_t i = 0; i <= n; i++) {
-            final.push(initial.pop());
+        if (head.is_empty()) {
+            size_t n = tail.size();
+            for (size_t i = 0; i < n; i++) {
+                head.push(tail.pop());
+            }
         }
-        int elem = final.pop();
-        for (int i = 0; i <n; i++) {
-            initial.push(final.pop());
-        }
-        return elem;
+        return head.pop();
     }
+
     bool is_empty() {
-        return initial.is_empty();
+        return head.is_empty() && tail.is_empty();
     }
 };
 
@@ -80,7 +80,7 @@ bool is_correct(size_t n) {
     Queue queue;
     int command = 0;
     int value = -1;
-    int realValue = -1;
+    int real_value = -1;
 
     for (int i = 0; i < n; ++i) {
         std::cin >> command >> value;
@@ -90,11 +90,11 @@ bool is_correct(size_t n) {
                 break;
             case 2:
                 if (!queue.is_empty()) {
-                    realValue = queue.remove();
+                    real_value = queue.remove();
                 } else {
-                    realValue = -1;
+                    real_value = -1;
                 }
-                if (realValue != value) {
+                if (real_value != value) {
                     return false;
                 }
                 break;
