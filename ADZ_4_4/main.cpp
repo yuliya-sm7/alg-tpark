@@ -29,7 +29,8 @@ public:
 
     int ExtractMax();
 
-    // const int& GetMax() const;
+    const int &GetMax() const;
+
     void BuildmaxHeap();
 
 
@@ -98,10 +99,8 @@ void maxHeap::SiftUp(size_t index) {
 void maxHeap::Add(int element) {
     if (size_ >= max_size_) {
         AllocateNewMem();
-        std::cout << "Alloc" << std::endl;
     }
     buff_[size_] = element;
-    // std::cout << "Element = " << element << "  size = " << size_ << std::endl;
     size_++;
     SiftUp(size_ - 1);
 }
@@ -117,6 +116,11 @@ int maxHeap::ExtractMax() {
     return result;
 }
 
+const int &maxHeap::GetMax() const {
+    return buff_[0];
+}
+
+
 int main() {
     size_t n = 0;
     std::cin >> n;
@@ -127,16 +131,25 @@ int main() {
     size_t k = 0;
     std::cin >> k;
 
-    maxHeap heap(n);
-    for (size_t i = 0; i < k; ++i) {
-        heap.Add(A[i]);
-    }
-    std::cout << heap.ExtractMax() << " ";
-    for(size_t end = k; end < n; ++end) {
-        heap.Add(A[end]);
-        std::cout << heap.ExtractMax() << " ";
-        //heap.BuildmaxHeap();
+    maxHeap *heap = new maxHeap(n);
+    for (size_t i = 0; i < k - 1; ++i) {
+        heap->Add(A[i]);
     }
 
+    for (size_t end = k - 1; end < n; ++end) {
+        heap->Add(A[end]);
+        int maxElem = heap->GetMax();
+        std::cout << maxElem << " ";
+
+        if (maxElem == A[end - k + 1]) {
+            delete heap;
+            heap = new maxHeap(n);
+            for (size_t i = 0; i < k-1; ++i) {
+                heap->Add(A[end - k + 2 + i]);
+            }
+        }
+    }
+    delete[] A;
+    delete heap;
     return 0;
 }
