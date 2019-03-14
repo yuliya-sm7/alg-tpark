@@ -10,6 +10,21 @@
 #include <cassert>
 #include <string.h>
 
+class Elem {
+public:
+    int value;
+    size_t index;
+
+    bool operator>(const Elem &x) {
+        return this->value > x.value;
+    };
+
+    bool operator<=(const Elem &x) {
+        return this->value <= x.value;
+    };
+};
+
+template<class T>
 class maxHeap {
 public:
     explicit maxHeap(size_t bufferSize);
@@ -24,15 +39,11 @@ public:
 
     maxHeap &operator=(maxHeap &) = delete;
 
-    //void Add(const int& element);
-    void Add(int element);
+    void Add(T element);
 
-    int ExtractMax();
+    T ExtractMax();
 
-    const int &GetMax() const;
-
-    void BuildmaxHeap();
-
+    const T &GetMax() const;
 
 private:
     void SiftDown(size_t index);
@@ -41,34 +52,32 @@ private:
 
     void AllocateNewMem();
 
-    int *buff_;
+    T *buff_;
     size_t max_size_;
     size_t size_;
 
 };
 
-maxHeap::maxHeap(size_t bufferSize) {
+template<class T>
+maxHeap<T>::maxHeap(size_t bufferSize) {
     size_ = 0;
     max_size_ = bufferSize;
-    buff_ = new int[bufferSize];
+    buff_ = new T[bufferSize];
 }
 
-void maxHeap::AllocateNewMem() {
+template<class T>
+void maxHeap<T>::AllocateNewMem() {
     max_size_ *= 2;
-    int *temp_buff = new int[max_size_ * 2];
-    memcpy(temp_buff, buff_, sizeof(int) * size_);
+    T *temp_buff = new T[max_size_ * 2];
+    memcpy(temp_buff, buff_, sizeof(T) * size_);
     delete[] buff_;
     buff_ = temp_buff;
 }
 
-void maxHeap::BuildmaxHeap() {
-    for (size_t i = (size_ / 2) - 1; i >= 0; i--) {
-        SiftDown(i);
-    }
-}
 
+template<class T>
 // проталкивание элемента вниз
-void maxHeap::SiftDown(size_t index) {
+void maxHeap<T>::SiftDown(size_t index) {
     size_t left = 2 * index + 1;
     size_t right = 2 * index + 2;
     size_t largest = index;
@@ -85,7 +94,8 @@ void maxHeap::SiftDown(size_t index) {
     }
 }
 
-void maxHeap::SiftUp(size_t index) {
+template<class T>
+void maxHeap<T>::SiftUp(size_t index) {
     while (index > 0) {
         size_t parent = (index - 1) / 2;
         if (buff_[index] <= buff_[parent]) {
@@ -96,7 +106,8 @@ void maxHeap::SiftUp(size_t index) {
     }
 }
 
-void maxHeap::Add(int element) {
+template<class T>
+void maxHeap<T>::Add(T element) {
     if (size_ >= max_size_) {
         AllocateNewMem();
     }
@@ -105,9 +116,10 @@ void maxHeap::Add(int element) {
     SiftUp(size_ - 1);
 }
 
-int maxHeap::ExtractMax() {
+template<class T>
+T maxHeap<T>::ExtractMax() {
     // if is not empty
-    int result = buff_[0];
+    T result = buff_[0];
     buff_[0] = buff_[size_ - 1];
     size_--; // delete last element
     if (size_ > 0) {
@@ -116,7 +128,8 @@ int maxHeap::ExtractMax() {
     return result;
 }
 
-const int &maxHeap::GetMax() const {
+template<class T>
+const T &maxHeap<T>::GetMax() const {
     return buff_[0];
 }
 
@@ -131,23 +144,25 @@ int main() {
     size_t k = 0;
     std::cin >> k;
 
-    maxHeap *heap = new maxHeap(n);
-    for (size_t i = 0; i < k - 1; ++i) {
-        heap->Add(A[i]);
+    maxHeap<Elem> *heap = new maxHeap<Elem>(k + 1);
+    Elem temp;
+    for (size_t i = 0; i < k; ++i) {
+        temp.index = i;
+        temp.value = A[i];
+        heap->Add(temp);
     }
+    std::cout << heap->GetMax().value << " ";
 
-    for (size_t end = k - 1; end < n; ++end) {
-        heap->Add(A[end]);
-        int maxElem = heap->GetMax();
-        std::cout << maxElem << " ";
+    for (size_t end = k; end < n; ++end) {
+        temp.index = end;
+        temp.value = A[end];
+        heap->Add(temp);
+        Elem maxElem = heap->GetMax();
 
-        if (maxElem == A[end - k + 1]) {
-            delete heap;
-            heap = new maxHeap(n);
-            for (size_t i = 0; i < k-1; ++i) {
-                heap->Add(A[end - k + 2 + i]);
-            }
+        while (maxElem.index < (end - k + 1)) {
+            maxElem = heap->ExtractMax();
         }
+        std::cout << maxElem.value << " ";
     }
     delete[] A;
     delete heap;

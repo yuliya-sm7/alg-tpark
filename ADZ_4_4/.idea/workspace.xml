@@ -13,6 +13,9 @@
   <component name="ChangeListManager">
     <list default="true" id="2527cc7e-7e10-4d4b-a407-49ff9de9a580" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/a.out" beforeDir="false" afterPath="$PROJECT_DIR$/a.out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/ADZ_4_4" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/ADZ_4_4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/ADZ_4_4.dir/main.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/ADZ_4_4.dir/main.cpp.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -28,8 +31,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="23">
-              <caret line="123" column="12" lean-forward="true" selection-start-line="123" selection-start-column="12" selection-end-line="123" selection-end-column="12" />
+            <state relative-caret-position="221">
+              <caret line="160" lean-forward="true" selection-start-line="160" selection-end-line="160" />
               <folding>
                 <element signature="e#591#610#0" expanded="true" />
               </folding>
@@ -48,6 +51,7 @@
       <find>elementNum</find>
       <find>out</find>
       <find>~maxHeap</find>
+      <find>int</find>
     </findStrings>
     <replaceStrings>
       <replace>MaxHeap</replace>
@@ -69,10 +73,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1433" />
-    <option name="y" value="25" />
-    <option name="width" value="1299" />
-    <option name="height" value="743" />
+    <option name="x" value="107" />
+    <option name="width" value="1289" />
+    <option name="height" value="555" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -100,6 +103,7 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="com.github.johnthagen.cppcheck.Configuration" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -134,22 +138,26 @@
       <workItem from="1552246564767" duration="7133000" />
       <workItem from="1552254110047" duration="3645000" />
       <workItem from="1552586190613" duration="7706000" />
+      <workItem from="1552594885807" duration="5263000" />
+      <workItem from="1552600488782" duration="223000" />
+      <workItem from="1552600731683" duration="1232000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="19540000" />
+    <option name="totallyTimeSpent" value="26258000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1433" y="25" width="1299" height="743" extended-state="6" />
+    <frame x="0" y="-2" width="1366" height="770" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26177174" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26060605" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.048859935" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39739415" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.20124805" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4267101" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -158,7 +166,7 @@
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="10" />
       <window_info anchor="bottom" id="CMake" order="11" />
-      <window_info anchor="bottom" id="Messages" order="12" weight="0.32899022" />
+      <window_info anchor="bottom" id="Messages" order="12" weight="0.32761312" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -184,8 +192,8 @@
     <entry file="file://$PROJECT_DIR$/../../c-technopark/DZ1.c" />
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23">
-          <caret line="123" column="12" lean-forward="true" selection-start-line="123" selection-start-column="12" selection-end-line="123" selection-end-column="12" />
+        <state relative-caret-position="221">
+          <caret line="160" lean-forward="true" selection-start-line="160" selection-end-line="160" />
           <folding>
             <element signature="e#591#610#0" expanded="true" />
           </folding>
