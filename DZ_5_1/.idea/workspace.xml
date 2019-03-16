@@ -33,12 +33,12 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="660">
-              <caret line="82" column="22" selection-start-line="82" selection-start-column="22" selection-end-line="82" selection-end-column="22" />
+            <state relative-caret-position="-458">
+              <caret line="28" column="5" selection-start-line="28" selection-start-column="5" selection-end-line="28" selection-end-column="5" />
               <folding>
                 <element signature="e#622#641#0" expanded="true" />
-                <element signature="e#832#841#0" expanded="true" />
-                <element signature="e#1183#1192#0" expanded="true" />
+                <element signature="e#1285#1294#0" expanded="true" />
+                <element signature="e#1598#1607#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -57,7 +57,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1433" />
+    <option name="x" value="67" />
     <option name="y" value="25" />
     <option name="width" value="1299" />
     <option name="height" value="743" />
@@ -74,6 +74,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
   </component>
@@ -108,16 +109,18 @@
       <updated>1552602364858</updated>
       <workItem from="1552602368795" duration="2296000" />
       <workItem from="1552680578727" duration="4863000" />
+      <workItem from="1552722810597" duration="665000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="7159000" />
+    <option name="totallyTimeSpent" value="7824000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1433" y="25" width="1299" height="743" extended-state="6" />
+    <frame x="67" y="25" width="1299" height="743" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26735833" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.27214685" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -148,12 +151,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="660">
-          <caret line="82" column="22" selection-start-line="82" selection-start-column="22" selection-end-line="82" selection-end-column="22" />
+        <state relative-caret-position="-458">
+          <caret line="28" column="5" selection-start-line="28" selection-start-column="5" selection-end-line="28" selection-end-column="5" />
           <folding>
             <element signature="e#622#641#0" expanded="true" />
-            <element signature="e#832#841#0" expanded="true" />
-            <element signature="e#1183#1192#0" expanded="true" />
+            <element signature="e#1285#1294#0" expanded="true" />
+            <element signature="e#1598#1607#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -27,11 +27,6 @@ public:
             return this->enter < R.enter;
         return false;
     }
-
-    bool operator<=(const Customer &R) {
-        return !(*this > R);
-    }
-
 };
 
 void show(Customer *arr, size_t n, int start, int adTime) {
@@ -45,7 +40,7 @@ void Merge(T a[], size_t a_len, T b[], size_t b_len, T c[]) {
     size_t i = 0;
     size_t j = 0;
     for (size_t k = 0; k < (a_len + b_len); k++) {
-        if ((j >= b_len) || (i < a_len && a[i] <= b[j])) {
+        if ((j >= b_len) || (i < a_len && b[j] > a[i])) {
             c[k] = a[i];
             i++;
         } else {
