@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/yu/Рабочий стол/alg-tpark/ADZ_3_3/main.cpp
+iostream
+-
+string.h
+-
+assert.h
+-
+
