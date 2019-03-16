@@ -47,20 +47,21 @@ ssize_t binary_check(int element, const int *array, ssize_t begin, ssize_t end) 
 
 
 // Поиск первого элемента массива array, который больше или равен element
-size_t greater_or_equal(int elem, int *array, size_t size) {
-    ssize_t begin = -1;
-    ssize_t end = 0;
-    ssize_t k = -1;
-
-    while (k < 0 && end < size) {
-        end = (begin + 1) * 2;
-        if (end < size)
-            k = binary_check(elem, array, begin, end);
-        else
-            k = binary_check(elem, array, begin, size - 1);
-        begin = end;
+size_t greater_or_equal(int elem[], int *array, size_t size) {
+    for (size_t i = 0; i < m; ++i) {
+        ssize_t begin = -1;
+        ssize_t end = 0;
+        ssize_t k = -1;
+        while (k < 0 && end < size) {
+            end = (begin + 1) * 2;
+            if (end < size && array[end] >= elem)
+                k = binary_check(elem, array, begin, end);
+            else if (array[end] >= elem)
+                k = binary_check(elem, array, begin, size - 1);
+            begin = end;
+        }
+        return k != -1 ? k : size;
     }
-    return k != -1 ? k : size;
 }
 
 
@@ -68,6 +69,8 @@ int main() {
     int *A, *B;
     size_t n, m;
     if (input_arr(A, B, n, m)) {
+        size_t *answer = greater_or_equal(B, A, n);
+
         for (size_t i = 0; i < m; ++i)
             std::cout << greater_or_equal(B[i], A, n) << " ";
         delete_input_arr(A, B);
