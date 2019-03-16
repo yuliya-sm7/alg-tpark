@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <string.h>
+#include <assert.h>
 
 template <class T>
 class Stack {
@@ -34,7 +35,7 @@ public:
         delete[] buff;
     }
 
-    void push(T elem) {
+    void push(const T& elem) {
         if (size() == max_size) {
             expand();
         }
@@ -42,10 +43,8 @@ public:
         buff[top] = elem;
     }
 
-    T pop() {
-        if (is_empty()) {
-            return -1;
-        }
+    const T& pop() {
+        assert (!is_empty());
         return buff[top--];
     }
 
@@ -57,7 +56,7 @@ public:
         buff = temp_buff;
     }
 
-    bool is_empty() {
+    bool is_empty() const {
         return (top < 0);
     }
 
@@ -73,11 +72,11 @@ private:
     Stack<T> tail;
     Stack<T> head;
 public:
-    void insert(T data) {
+    void insert(const T& data) {
         tail.push(data);
     }
 
-    T remove() {
+    const T& remove() {
         if (head.is_empty()) {
             size_t n = tail.size();
             for (size_t i = 0; i < n; i++) {
@@ -87,7 +86,7 @@ public:
         return head.pop();
     }
 
-    bool is_empty() {
+    bool is_empty() const{
         return head.is_empty() && tail.is_empty();
     }
 };
