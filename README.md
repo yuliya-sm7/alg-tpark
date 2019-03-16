@@ -1,5 +1,12 @@
 # alg-tpark
 
+## Задания
+https://docs.google.com/document/d/1lpakMcwqKIUkuZKiNhuhnmXf9nfGNu6ln74kbn5Bt8E/edit
+## Контест
+https://contest.yandex.ru/contest/12111/enter/
+## Блог
+https://park.mail.ru/blog/view/17/
+
 ## 1_3. 
 Даны два строго возрастающих массива целых чисел A[0..n) и B[0..m) и число k. Найти количество таких пар индексов (i, j), что A[i] + B[j] = k. Время работы O(n + m).
 n, m ≤ 100000.
