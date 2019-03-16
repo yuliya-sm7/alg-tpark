@@ -1,0 +1,3 @@
+/home/yu/Рабочий стол/alg-tpark/ADZ_4_4/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/yu/Рабочий стол/alg-tpark/ADZ_4_4/cmake-build-debug/CMakeFiles/ADZ_4_4.dir
+/home/yu/Рабочий стол/alg-tpark/ADZ_4_4/cmake-build-debug/CMakeFiles/edit_cache.dir
