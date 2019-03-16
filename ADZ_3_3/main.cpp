@@ -1,25 +1,40 @@
+
+/*
+ * 3_3. Реализовать очередь с помощью двух стеков.
+ * Использовать стек, реализованный с помощью динамического буфера.
+ */
+
 #include <iostream>
 #include <string.h>
 
+template <class T>
 class Stack {
 
 private:
     size_t max_size;
-    int *buff;
+    T *buff;
     ssize_t top;
 
 public:
     explicit Stack(size_t length = 1) {
         top = -1;
         max_size = length;
-        buff = new int[max_size];
+        buff = new T[max_size];
     }
+
+    Stack(const Stack &s){  // конструктор копирования
+        max_size = s.max_size;
+        top = s.top;
+        memcpy(buff, s.buff, sizeof(T) * s.size());
+    };
+
+    Stack operator = (const Stack &s) = delete;
 
     ~Stack() {
         delete[] buff;
     }
 
-    void push(int elem) {
+    void push(T elem) {
         if (size() == max_size) {
             expand();
         }
@@ -27,7 +42,7 @@ public:
         buff[top] = elem;
     }
 
-    int pop() {
+    T pop() {
         if (is_empty()) {
             return -1;
         }
@@ -36,8 +51,8 @@ public:
 
     void expand() {
         max_size *= 2;
-        int *temp_buff = new int[max_size];
-        memcpy(temp_buff, buff, sizeof(int) * size());
+        T *temp_buff = new T[max_size];
+        memcpy(temp_buff, buff, sizeof(T) * size());
         delete[] buff;
         buff = temp_buff;
     }
@@ -51,17 +66,18 @@ public:
     }
 };
 
-
+template <class T>
 class Queue {
+
 private:
-    Stack tail;
-    Stack head;
+    Stack<T> tail;
+    Stack<T> head;
 public:
-    void insert(int data) {
+    void insert(T data) {
         tail.push(data);
     }
 
-    int remove() {
+    T remove() {
         if (head.is_empty()) {
             size_t n = tail.size();
             for (size_t i = 0; i < n; i++) {
@@ -77,12 +93,12 @@ public:
 };
 
 bool is_correct(size_t n) {
-    Queue queue;
+    Queue<int> queue;
     int command = 0;
     int value = -1;
     int real_value = -1;
 
-    for (int i = 0; i < n; ++i) {
+    for (size_t i = 0; i < n; ++i) {
         std::cin >> command >> value;
         switch (command) {
             case 3:
