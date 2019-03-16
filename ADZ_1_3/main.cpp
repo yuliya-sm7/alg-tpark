@@ -53,6 +53,7 @@ size_t sums_equals_to(const int *series1, const int *series2, \
                 j_max = j - 1;
                 break;
             } else if (res < k) {
+                j_max = j;
                 break;
             }
         }
