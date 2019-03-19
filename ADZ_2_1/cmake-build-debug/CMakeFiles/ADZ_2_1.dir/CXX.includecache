@@ -9,4 +9,6 @@
 /home/yu/Рабочий стол/alg-tpark/ADZ_2_1/main.cpp
 iostream
 -
+stdarg.h
+-
 
