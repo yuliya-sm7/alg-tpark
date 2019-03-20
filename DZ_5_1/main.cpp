@@ -19,14 +19,6 @@ public:
     int ads_count;
 
     Customer() : enter(0), exit(0), ads_count(0) {};
-
-    bool operator>(const Customer &R) {
-        if (this->exit > R.exit)
-            return true;
-        if (this->exit == R.exit)
-            return this->enter < R.enter;
-        return false;
-    }
 };
 
 void show(Customer *arr, size_t n, int start, int adTime) {
@@ -35,12 +27,22 @@ void show(Customer *arr, size_t n, int start, int adTime) {
             arr[i].ads_count++;
 }
 
-template<class T>
-void Merge(T a[], size_t a_len, T b[], size_t b_len, T c[]) {
+
+bool TimeOfExit(const Customer &first, const Customer second) {
+    if (first.exit > second.exit)
+        return true;
+    if (first.exit == second.exit)
+        return first.enter < second.enter;
+    return false;
+}
+
+
+template<class T, class Compare>
+void Merge(T a[], size_t a_len, T b[], size_t b_len, T c[], Compare cmp) {
     size_t i = 0;
     size_t j = 0;
     for (size_t k = 0; k < (a_len + b_len); k++) {
-        if ((j >= b_len) || (i < a_len && b[j] > a[i])) {
+        if ((j >= b_len) || (i < a_len && cmp(b[j], a[i]))) {
             c[k] = a[i];
             i++;
         } else {
@@ -50,18 +52,18 @@ void Merge(T a[], size_t a_len, T b[], size_t b_len, T c[]) {
     }
 }
 
-template<class T>
-void MergeSort(T a[], size_t aLen) {
+template<class T, class Compare>
+void MergeSort(T arr[], size_t aLen, Compare cmp) {
     if (aLen <= 1) {
         return;
     }
     size_t firstLen = aLen / 2;
     size_t secondLen = aLen - firstLen;
-    MergeSort(a, firstLen);
-    MergeSort(a + firstLen, secondLen);
+    MergeSort(arr, firstLen, cmp);
+    MergeSort(arr + firstLen, secondLen, cmp);
     T *c = new T[aLen];
-    Merge(a, firstLen, a + firstLen, secondLen, c);
-    memcpy(a, c, sizeof(T) * aLen);
+    Merge(arr, firstLen, arr + firstLen, secondLen, c, cmp);
+    memcpy(arr, c, sizeof(T) * aLen);
     delete[] c;
 }
 
@@ -73,7 +75,7 @@ int main() {
     for (int i = 0; i < n; i++) {
         std::cin >> A[i].enter >> A[i].exit;
     }
-    MergeSort(A, n);
+    MergeSort(A, n, TimeOfExit);
 
     int ads_count = 0;
     for (int i = 0; i < n; i++) {
