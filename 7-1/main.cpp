@@ -14,8 +14,9 @@ g(k, i)=g(k, i-1) + i (mod m). m - степень двойки.
 #include <string>
 #include <vector>
 
-const float level = 0.75;
-const int alpha = 23;
+const double LEVEL = 0.75;
+const int PARAMETER = 23;
+const int MUL_REHASH = 2;
 
 using std::string;
 
@@ -34,7 +35,7 @@ public:
 private:
     int alpha_;
     size_t nodeCount_;
-    float rehashLevel_;
+    double rehashLevel_;
 
     struct Node {
         Node() : key(""), deleted(false) {}
@@ -49,25 +50,29 @@ private:
 
     std::vector<Node> table;
 
-    size_t Hash(const string &key) const;
+    size_t Hash(const string &key, size_t probe) const;
 
     void Rehash();
+
+    ssize_t find(const string &key) const;
 };
 
 
 HashTable::HashTable(size_t size) :
-        table(size), alpha_(alpha), nodeCount_(0), rehashLevel_(level) {}
+        table(size), alpha_(PARAMETER), nodeCount_(0), rehashLevel_(LEVEL) {}
 
-size_t HashTable::Hash(const string &key) const {
+size_t HashTable::Hash(const string &key, size_t probe) const {
     size_t hash = 0;
+    size_t m = table.size();
     for (auto letter:key) {
-        hash = (hash * alpha_ + letter) % table.size();
+        hash = (hash * alpha_ + letter) % m;
     }
-    return hash;
+    double c1 = 1.0/2, c2 = 1.0/2;
+    return size_t (hash + c1 * probe + c2 * probe * probe) % m;
 }
 
 void HashTable::Rehash() {
-    size_t new_size = 2 * table.size();
+    size_t new_size = MUL_REHASH * table.size();
     std::vector<Node> temp_table(std::move(table)); // переносим таблицу во временный вектор
     table.resize(new_size);
 
@@ -79,61 +84,58 @@ void HashTable::Rehash() {
     }
 }
 
-
 bool HashTable::There(const string &key) const {
-    size_t hash = Hash(key);
-    for (int i = 0; i < table.size(); ++i) {
-        hash = (hash + i) % table.size();
-        if (table[hash].key == key && !table[hash].deleted) {
-            return true;
-        }
-        if ((table[hash].isEmpty() && !table[hash].deleted) || (i >= table.size())) {
-            return false;
-        }
-    }
-    return false;
+    return find(key) != -1;
 }
 
 bool HashTable::Add(const string &key) {
-    if (nodeCount_ >= table.size() * rehashLevel_) {
+    if (nodeCount_ >= table.size() * rehashLevel_)
         Rehash();
-    }
-    size_t next_hash = Hash(key);
-    size_t hash = next_hash;
-    int i = 0;
-    do {
-        next_hash = (next_hash + i) % table.size();
-        if (!table[hash].isEmpty() || !table[hash].deleted) {
-            hash = next_hash;
+    ssize_t insert_place = -1;
+    size_t hash;
+    for (size_t probe = 0; probe < table.size(); ++probe) {
+        hash = Hash(key, probe);
+
+        if (table[hash].isEmpty()) {
+            if (insert_place == -1)
+                insert_place = hash;
+            break;
         }
-        if (table[next_hash].key == key) {
+        if (table[hash].deleted) {
+            if (insert_place == -1)
+                insert_place = hash;
+        } else if (table[hash].key == key)
             return false;
-        }
-        i++;
-    } while (!table[next_hash].isEmpty() || table[next_hash].deleted);
-    table[hash].key = key;
-    table[hash].deleted = false;
+    }
+    if (insert_place == -1)
+        return false;
+    table[insert_place].key = key;
+    table[insert_place].deleted = false;
     nodeCount_++;
     return true;
 }
 
-
 bool HashTable::Remove(const string &key) {
-    size_t hash = Hash(key);
-    int i = 0;
-    while (true) {
-        hash = (hash + i) % table.size();
-        if (table[hash].key == key && !table[hash].deleted) {
-            table[hash].key = "";
-            table[hash].deleted = true;
-            return true;
-        }
-        if ((table[hash].isEmpty() && !table[hash].deleted) || (i >= table.size())) {
-            return false;
-        }
-        i++;
-    }
+    ssize_t hash = find(key);
+    if (hash == -1)
+        return false;
+    table[hash].deleted = true;
+    --nodeCount_;
+    return true;
 }
+
+ssize_t HashTable::find(const string &key) const {
+    ssize_t hash;
+    for (size_t probe = 0; probe < table.size(); ++probe) {
+        hash = Hash(key, probe);
+        if (table[hash].isEmpty())
+            return -1;
+        if (table[hash].key == key && !table[hash].deleted)
+            return hash;
+    }
+    return -1;
+}
+
 
 void handling(char command, HashTable &table) {
     bool success;
