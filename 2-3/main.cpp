@@ -11,34 +11,35 @@
 #include <vector>
 #include <stack>
 
+template<class T>
 class BinTree {
 public:
     BinTree() = default;
 
-    ~BinTree() { delete node_; };
+    ~BinTree() { Delete(); };
 
-    void Add(int K);
+    void Add(T K);
 
-    std::vector<int> Post_order();
+    std::vector<T> Post_order();
 
 private:
+    void Delete();
+
     struct Node {
-        int key;
+        T key;
         Node *left;
         Node *right;
 
-        explicit Node(const int &key) : key(key), left(nullptr), right(nullptr) {}
+        explicit Node(const T &key) : key(key), left(nullptr), right(nullptr) {}
 
-        ~Node() {
-            delete left;
-            delete right;
-        }
+        ~Node() = default;
     };
 
     Node *node_ = nullptr;
 };
 
-void BinTree::Add(int K) {
+template<class T>
+void BinTree<T>::Add(T K) {
     Node *new_node = new Node(K);
     Node **ptr_insert = &node_;
 
@@ -52,7 +53,34 @@ void BinTree::Add(int K) {
     *ptr_insert = new_node;
 }
 
-std::vector<int> BinTree::Post_order() {
+template<class T>
+void BinTree<T>::Delete() {
+    std::stack<Node *> st;
+    st.push(node_);
+    while (!st.empty() && node_ != nullptr) {
+        Node *curr_node = st.top();
+        if (curr_node->left) {
+            st.push(curr_node->left);
+        } else if (curr_node->right) {
+            st.push(curr_node->right);
+        } else {
+            st.pop();
+            if (!st.empty()) {
+                Node *prev_node = st.top();
+                if (prev_node->right == curr_node) {
+                    prev_node->right = nullptr;
+                } else {
+                    prev_node->left = nullptr;
+                }
+            }
+            delete curr_node;
+        }
+    }
+}
+
+
+template<class T>
+std::vector<T> BinTree<T>::Post_order() {
     std::vector<int> result;
     std::stack<Node *> st;
     Node *prev_node = nullptr;
@@ -70,7 +98,7 @@ std::vector<int> BinTree::Post_order() {
                 result.push_back(curr_node->key);
                 st.pop();
             }
-        } else if (curr_node->right == prev_node) {
+        } else {
             result.push_back(curr_node->key);
             st.pop();
         }
@@ -83,7 +111,7 @@ std::vector<int> BinTree::Post_order() {
 int main() {
     size_t N = 0;
     std::cin >> N;
-    BinTree tree;
+    BinTree<int> tree;
     int element;
     for (size_t i = 0; i < N; i++) {
         std::cin >> element;
