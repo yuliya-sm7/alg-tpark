@@ -20,126 +20,125 @@ const int MUL_REHASH = 2;
 
 using std::string;
 
+template<class T>
 class HashTable {
 public:
     explicit HashTable(size_t size);
 
     ~HashTable() = default;
 
-    bool There(const string &key) const;
+    bool There(const T &key) const;
 
-    bool Add(const string &key);
+    bool Add(const T &key);
 
-    bool Remove(const string &key);
+    bool Remove(const T &key);
 
 private:
     int alpha_;
     size_t nodeCount_;
     double rehashLevel_;
 
-    struct Node {
-        Node() : key(""), deleted(false) {}
+    std::vector<T> table;
+    std::vector<bool> deleted;
 
-        string key;
-        bool deleted;
-
-        bool isEmpty() const {
-            return key.empty();
-        }
-    };
-
-    std::vector<Node> table;
-
-    size_t Hash(const string &key, size_t probe) const;
+    size_t Hash(const T &key, size_t probe, ssize_t old_hash) const;
 
     void Rehash();
 
-    ssize_t find(const string &key) const;
+    ssize_t find(const T &key) const;
 };
 
+template<class T>
+HashTable<T>::HashTable(size_t size) :
+        table(size), deleted(size, false), alpha_(PARAMETER), nodeCount_(0), rehashLevel_(LEVEL) {}
 
-HashTable::HashTable(size_t size) :
-        table(size), alpha_(PARAMETER), nodeCount_(0), rehashLevel_(LEVEL) {}
-
-size_t HashTable::Hash(const string &key, size_t probe) const {
-    size_t hash = 0;
+template<class T>
+size_t HashTable<T>::Hash(const T &key, size_t probe, ssize_t old_hash) const {
     size_t m = table.size();
-    for (auto letter:key) {
-        hash = (hash * alpha_ + letter) % m;
+    if (old_hash <0) {
+        old_hash = 0;
+        for (auto letter:key) {
+            old_hash = (old_hash * alpha_ + letter) % m;
+        }
     }
-    double c1 = 1.0/2, c2 = 1.0/2;
-    return size_t (hash + c1 * probe + c2 * probe * probe) % m;
+    double c1 = 1.0 / 2, c2 = 1.0 / 2;
+    return size_t(old_hash + c1 * probe + c2 * probe * probe) % m;
 }
 
-void HashTable::Rehash() {
+template<class T>
+void HashTable<T>::Rehash() {
     size_t new_size = MUL_REHASH * table.size();
-    std::vector<Node> temp_table(std::move(table)); // переносим таблицу во временный вектор
+    std::vector<T> temp_table(std::move(table)); // переносим таблицу во временный вектор
+    std::vector<bool> temp_deleted(std::move(deleted));
     table.resize(new_size);
+    deleted.resize(new_size, false);
 
     nodeCount_ = 0;
-    for (auto &nod:temp_table) {
-        if (!nod.isEmpty() && !nod.deleted) {
-            Add(nod.key);
+    for (int i = 0; i < temp_table.size(); ++i) {
+        if (!temp_table[i].empty() && !temp_deleted[i]) {
+            Add(temp_table[i]);
         }
     }
 }
 
-bool HashTable::There(const string &key) const {
+template<class T>
+bool HashTable<T>::There(const T &key) const {
     return find(key) != -1;
 }
 
-bool HashTable::Add(const string &key) {
+template<class T>
+bool HashTable<T>::Add(const T &key) {
     if (nodeCount_ >= table.size() * rehashLevel_)
         Rehash();
     ssize_t insert_place = -1;
-    size_t hash;
+    ssize_t hash = -1;
     for (size_t probe = 0; probe < table.size(); ++probe) {
-        hash = Hash(key, probe);
+        hash = Hash(key, probe, hash);
 
-        if (table[hash].isEmpty()) {
+        if (table[hash].empty()) {
             if (insert_place == -1)
                 insert_place = hash;
             break;
         }
-        if (table[hash].deleted) {
+        if (deleted[hash]) {
             if (insert_place == -1)
                 insert_place = hash;
-        } else if (table[hash].key == key)
+        } else if (table[hash] == key)
             return false;
     }
-    if (insert_place == -1)
-        return false;
-    table[insert_place].key = key;
-    table[insert_place].deleted = false;
+    table[insert_place] = key;
+    deleted[insert_place] = false;
     nodeCount_++;
     return true;
 }
 
-bool HashTable::Remove(const string &key) {
+template<class T>
+bool HashTable<T>::Remove(const T &key) {
     ssize_t hash = find(key);
     if (hash == -1)
         return false;
-    table[hash].deleted = true;
+    deleted[hash] = true;
     --nodeCount_;
     return true;
 }
 
-ssize_t HashTable::find(const string &key) const {
-    ssize_t hash;
+template<class T>
+ssize_t HashTable<T>::find(const T &key) const {
+    ssize_t hash = -1;
     for (size_t probe = 0; probe < table.size(); ++probe) {
-        hash = Hash(key, probe);
-        if (table[hash].isEmpty())
+        hash = Hash(key, probe, hash);
+        if (table[hash].empty())
             return -1;
-        if (table[hash].key == key && !table[hash].deleted)
+        if (table[hash] == key && !deleted[hash])
             return hash;
     }
     return -1;
 }
 
-
-void handling(char command, HashTable &table) {
+template<class T>
+void handling(char command, HashTable<T> &table) {
     bool success;
-    string key;
+    T key;
     std::cin >> key;
     switch (command) {
         case '?':
@@ -158,7 +157,7 @@ void handling(char command, HashTable &table) {
 }
 
 int main() {
-    HashTable table(8);
+    HashTable<string> table(2);
     char command = 0;
     while (std::cin >> command) {
         handling(command, table);
