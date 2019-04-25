@@ -39,7 +39,7 @@ private:
     double rehashLevel_;
 
     std::vector<T> table;
-    std::vector<bool> deleted;
+    std::vector<char> status;  // f - free, d - deleted, b - busy
 
     size_t Hash(const T &key, size_t probe, ssize_t old_hash) const;
 
@@ -50,12 +50,12 @@ private:
 
 template<class T>
 HashTable<T>::HashTable(size_t size) :
-        table(size), deleted(size, false), alpha_(PARAMETER), nodeCount_(0), rehashLevel_(LEVEL) {}
+        table(size), status(size, 'f'), alpha_(PARAMETER), nodeCount_(0), rehashLevel_(LEVEL) {}
 
 template<class T>
 size_t HashTable<T>::Hash(const T &key, size_t probe, ssize_t old_hash) const {
     size_t m = table.size();
-    if (old_hash <0) {
+    if (old_hash < 0) {
         old_hash = 0;
         for (auto letter:key) {
             old_hash = (old_hash * alpha_ + letter) % m;
@@ -69,13 +69,13 @@ template<class T>
 void HashTable<T>::Rehash() {
     size_t new_size = MUL_REHASH * table.size();
     std::vector<T> temp_table(std::move(table)); // переносим таблицу во временный вектор
-    std::vector<bool> temp_deleted(std::move(deleted));
+    std::vector<char> temp_status(std::move(status));
     table.resize(new_size);
-    deleted.resize(new_size, false);
+    status.resize(new_size, 'f');
 
     nodeCount_ = 0;
     for (int i = 0; i < temp_table.size(); ++i) {
-        if (!temp_table[i].empty() && !temp_deleted[i]) {
+        if (temp_status[i] == 'b') {
             Add(temp_table[i]);
         }
     }
@@ -95,19 +95,19 @@ bool HashTable<T>::Add(const T &key) {
     for (size_t probe = 0; probe < table.size(); ++probe) {
         hash = Hash(key, probe, hash);
 
-        if (table[hash].empty()) {
+        if (status[hash] == 'f') {
             if (insert_place == -1)
                 insert_place = hash;
             break;
         }
-        if (deleted[hash]) {
+        if (status[hash] == 'd') {
             if (insert_place == -1)
                 insert_place = hash;
         } else if (table[hash] == key)
             return false;
     }
     table[insert_place] = key;
-    deleted[insert_place] = false;
+    status[insert_place] = 'b';
     nodeCount_++;
     return true;
 }
@@ -117,7 +117,7 @@ bool HashTable<T>::Remove(const T &key) {
     ssize_t hash = find(key);
     if (hash == -1)
         return false;
-    deleted[hash] = true;
+    status[hash] = 'd';
     --nodeCount_;
     return true;
 }
@@ -127,9 +127,9 @@ ssize_t HashTable<T>::find(const T &key) const {
     ssize_t hash = -1;
     for (size_t probe = 0; probe < table.size(); ++probe) {
         hash = Hash(key, probe, hash);
-        if (table[hash].empty())
+        if (status[hash] == 'f')
             return -1;
-        if (table[hash] == key && !deleted[hash])
+        if (table[hash] == key && status[hash] != 'd')
             return hash;
     }
     return -1;
