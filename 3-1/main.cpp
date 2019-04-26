@@ -31,6 +31,37 @@ struct Node {
 };
 
 template<class T>
+size_t  depth(Node<T> *root) {
+    ssize_t depth = 0;
+    ssize_t max_depth = 0;
+    std::stack<Node<T> *> st;
+    Node<T> *prev_node = nullptr;
+    st.push(root);
+    while (!st.empty() && root != nullptr) {
+        Node<T> *curr_node = st.top();
+        depth++;
+        if (!prev_node || prev_node->left == curr_node || prev_node->right == curr_node ||
+            curr_node->left == prev_node) {
+            if (curr_node->left && curr_node->left != prev_node) {
+                st.push(curr_node->left);
+            } else if (curr_node->right) {
+                st.push(curr_node->right);
+            } else {
+                st.pop();
+                max_depth = std::max(max_depth, depth);
+                depth -= 2;
+            }
+        } else {
+            st.pop();
+            max_depth = std::max(max_depth, depth);
+            depth -= 2;
+        }
+        prev_node = curr_node;
+    }
+    return (size_t)max_depth;
+}
+
+template<class T>
 void Delete(Node<T> *node_) {
     std::stack<Node<T> *> st;
     st.push(node_);
@@ -68,10 +99,7 @@ public:
 
     size_t getDepth();
 
-
 private:
-    size_t depth(Node<T> *node, size_t depth_len);
-
     Node<T> *node_ = nullptr;
 };
 
@@ -92,15 +120,7 @@ void BinTree<T>::Add(T K) {
 
 template<class T>
 size_t BinTree<T>::getDepth() {
-    return depth(node_, 0);
-}
-
-template<class T>
-size_t BinTree<T>::depth(Node<T> *node, size_t depth_len) {
-    if (node == nullptr) {
-        return depth_len;
-    }
-    return std::max(depth(node->left, depth_len + 1), depth(node->right, depth_len + 1));
+    return depth(node_);
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -114,14 +134,12 @@ public:
 
     void Add(T key, T priority);
 
-    int getDepth();
+    size_t getDepth();
 
 private:
     Node<T> *root_;
 
     void split(Node<T> *node, int key, Node<T> *&left, Node<T> *&right);
-
-    size_t depth(Node<T> *node, size_t depth_len);
 };
 
 template<class T>
@@ -146,7 +164,6 @@ void Treap<T>::Add(T key, T priority) {
         root_ = new_node;
         return;
     }
-
     Node<T> *node = root_;
     Node<T> *prev = root_;
     while (node != nullptr && priority < node->priority) {
@@ -168,20 +185,11 @@ void Treap<T>::Add(T key, T priority) {
             prev->left = new_node;
         }
     }
-
 }
 
 template<class T>
-int Treap<T>::getDepth() {
-    return depth(root_, 0);
-}
-
-template<class T>
-size_t Treap<T>::depth(Node<T> *node, size_t depth_len) {
-    if (node == nullptr) {
-        return depth_len;
-    }
-    return std::max(depth(node->left, depth_len + 1), depth(node->right, depth_len + 1));
+size_t Treap<T>::getDepth() {
+    return depth(root_);
 }
 
 

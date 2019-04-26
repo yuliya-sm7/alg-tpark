@@ -7,6 +7,7 @@
 // Требуемая скорость выполнения запроса - O(log n).
 
 #include <iostream>
+#include <stack>
 
 template<class T>
 struct Node {
