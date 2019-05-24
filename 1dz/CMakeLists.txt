@@ -3,4 +3,4 @@ project(1dz)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(1dz main.cpp)
+add_executable(1dz main.cpp CListGraph.cpp CListGraph.h IGraph.h)
