@@ -1,14 +1,14 @@
 
 #include <iostream>
 #include "CListGraph.h"
+#include "CMatrixGraph.h"
+#include "CSetGraph.h"
+#include "CArcGraph.h"
 
-void list_graph(const IGraph& graph_input) {
 
-    CListGraph graph(&graph_input);
-    graph.Print(std::cout);
+void printV(const IGraph& graph, int vert) {
 
     std::cout << "Колличество вершин: " << graph.VerticesCount() << std::endl;
-    int  vert = 1;
 
     std::cout << "Входящие ребра для " << vert;
     std::vector<int> prev_vertices = graph.GetPrevVertices(vert);
@@ -35,7 +35,21 @@ int main() {
     graph.AddEdge(1, 3);
     graph.AddEdge(3, 1);
 
-    list_graph(graph);
+    CListGraph list(&graph);
+    list.show();
+    printV(list, 0);
+
+    CMatrixGraph matrix(&graph);
+    matrix.show();
+    printV(matrix, 1);
+
+    CSetGraph set(&graph);
+    set.show();
+    printV(set, 2);
+
+    CArcGraph arc(&graph);
+    arc.show();
+    printV(arc, 3);
 
     return 0;
 }

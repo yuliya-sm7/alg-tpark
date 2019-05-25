@@ -51,13 +51,14 @@ std::vector<int> CListGraph::GetPrevVertices(int vertex) const {
     return in_edges_[vertex];
 }
 
-void CListGraph::Print(std::ostream& out) {
+void CListGraph::show() {
+    std::cout << std::endl;
     std::cout << "CListGraph:" << std::endl;
     for (int i = 0; i < out_edges_.size(); i++) {
-        out << i << ": ";
+        std::cout << i << ": ";
         for (auto out_target : out_edges_[i]) {
-            out << out_target << " ";
+            std::cout << out_target << " ";
         }
-        out << std::endl;
+        std::cout << std::endl;
     }
 }

@@ -5,6 +5,8 @@
 #ifndef INC_1DZ_IGRAPH_H
 #define INC_1DZ_IGRAPH_H
 
+#include <iostream>
+#include <cassert>
 #include <vector>
 using std::vector;
 
