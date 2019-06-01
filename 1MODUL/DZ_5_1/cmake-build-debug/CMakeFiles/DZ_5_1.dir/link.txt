@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/DZ_5_1.dir/main.cpp.o  -o DZ_5_1 

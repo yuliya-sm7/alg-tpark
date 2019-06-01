@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/ADZ_3_3.dir/main.cpp.o  -o ADZ_3_3 
