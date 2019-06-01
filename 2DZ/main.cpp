@@ -2,21 +2,32 @@
 #include <vector>
 #include <queue>
 
-class Graph {
+class IGraph {
+public:
+    virtual void AddEdge(int from, int to) = 0;
+
+    virtual int GetSize() const = 0;
+
+    virtual const std::vector<int> & GetNextVertices(int from) const = 0;
+};
+
+class Graph : public IGraph {
 public:
     explicit Graph(int vertices_count);
 
-    void AddEdge(int from, int to);
+    void AddEdge(int from, int to) final;
 
-    int ShortestPathsCount(int from, int to);
+    int GetSize() const final;
+
+    const std::vector<int> & GetNextVertices(int from) const final;
 
 private:
-
     std::vector<std::vector<int>> out_edges;
-
-    void Bfs(int from, std::vector<int> &paths, std::vector<int> &depth);
 };
 
+int Graph::GetSize() const {
+    return out_edges.size();
+}
 
 Graph::Graph(int vertices_count) :
         out_edges(vertices_count) {}
@@ -33,14 +44,11 @@ void Graph::AddEdge(int from, int to) {
     out_edges[from].push_back(to);
 }
 
-int Graph::ShortestPathsCount(int from, int to) {
-    std::vector<int> paths(out_edges.size());
-    std::vector<int> depth(out_edges.size());
-    Bfs(from, paths, depth);
-    return paths[to];
+const std::vector<int> & Graph::GetNextVertices(int from) const {
+    return out_edges[from];
 }
 
-void Graph::Bfs(int from, std::vector<int> &paths, std::vector<int> &depth) {
+void Bfs(const IGraph &graph, int from, std::vector<int> &paths, std::vector<int> &depth) {
     std::queue<int> q;
     q.push(from);
     paths[from] = 1;
@@ -48,7 +56,7 @@ void Graph::Bfs(int from, std::vector<int> &paths, std::vector<int> &depth) {
     while (!q.empty()) {
         int current = q.front();
         q.pop();
-        std::vector<int> next_vertices = out_edges[current];
+        const std::vector<int> & next_vertices = graph.GetNextVertices(current);
 
         for (auto item : next_vertices) {
             // если не была посещена, добавляем в очередь
@@ -63,6 +71,13 @@ void Graph::Bfs(int from, std::vector<int> &paths, std::vector<int> &depth) {
             }
         }
     }
+}
+
+int ShortestPathsCount(const IGraph &graph, int from, int to) {
+    std::vector<int> paths(graph.GetSize());
+    std::vector<int> depth(graph.GetSize());
+    Bfs(graph, from, paths, depth);
+    return paths[to];
 }
 
 
@@ -80,6 +95,6 @@ int main() {
     }
 
     std::cin >> in >> out;
-    std::cout << graph.ShortestPathsCount(in, out) << std::endl;
+    std::cout << ShortestPathsCount(graph, in, out) << std::endl;
     return 0;
 }
